@@ -22,13 +22,18 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="lfY-yx-c14" firstAttribute="top" secondItem="jqT-bz-K2g" secondAttribute="bottom" id="4GL-yf-BID"/>
                             <constraint firstItem="jqT-bz-K2g" firstAttribute="leading" secondItem="8m2-NV-2dD" secondAttribute="leading" id="Tnm-cP-tXo"/>
                             <constraint firstAttribute="trailing" secondItem="jqT-bz-K2g" secondAttribute="trailing" id="kTP-dz-Z8G"/>
                             <constraint firstItem="jqT-bz-K2g" firstAttribute="top" secondItem="jz4-ZC-sFe" secondAttribute="bottom" id="qgA-ta-F4E"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="mp7-Bp-TCZ" appends="YES" id="9Sa-a9-BUO"/>
+                            <outletCollection property="gestureRecognizers" destination="PXw-J5-Vmk" appends="YES" id="pi2-Tu-uOG"/>
+                        </connections>
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -37,6 +42,12 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XuT-9q-fCQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="mp7-Bp-TCZ"/>
+                <pinchGestureRecognizer id="PXw-J5-Vmk">
+                    <connections>
+                        <action selector="handlePinchWithRecognizer:" destination="7dt-jC-Z69" id="chn-bm-XrU"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="213.59999999999999" y="232.53373313343329"/>
         </scene>
