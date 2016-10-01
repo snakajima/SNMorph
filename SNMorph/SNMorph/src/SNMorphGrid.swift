@@ -34,16 +34,15 @@ struct SNMorphGrid {
         let origin = CGPoint(x:gridSize.width * CGFloat(border), y:gridSize.height * CGFloat(border))
         context.draw(image.cgImage!, in: CGRect(origin: origin, size:image.size))
         dataIn = data
-        cgImage = context.makeImage() // test code
 
         dataOut = NSMutableData(length: length)!
         memcpy(dataOut.mutableBytes, dataIn.bytes, length)
         
-        //updateImage()
+        updateImage()
     }
     
     private mutating func updateImage() {
-        let context = CGContext(data: dataOut.mutableBytes, width: gridX, height: gridY, bitsPerComponent: 8, bytesPerRow: 4 * gridX, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
+        let context = CGContext(data: dataOut.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
         cgImage = context.makeImage()
     }
 }
