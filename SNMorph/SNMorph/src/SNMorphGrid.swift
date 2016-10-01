@@ -42,7 +42,7 @@ struct SNMorphGrid {
         let pmap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         for y in 0..<Int(size.width) {
             for x in 0..<Int(size.height) {
-                pmap[y * Int(size.width) + x] = CGPoint(x: CGFloat(x) * cellSize.width, y:CGFloat(y) * cellSize.height)
+                pmap[y * Int(size.width) + x] = CGPoint(x: CGFloat(x) / cellSize.width, y:CGFloat(y) / cellSize.height)
             }
         }
         updateImage()
@@ -51,5 +51,10 @@ struct SNMorphGrid {
     private mutating func updateImage() {
         let context = CGContext(data: dataOut.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
         cgImage = context.makeImage()
+    }
+    
+    func map(pt:CGPoint) -> CGPoint {
+        let pmap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
+        return pmap[Int(pt.y) * Int(size.width) + Int(pt.x)]
     }
 }

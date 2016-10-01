@@ -42,7 +42,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XuT-9q-fCQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="mp7-Bp-TCZ"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="mp7-Bp-TCZ">
+                    <connections>
+                        <action selector="handlePanWithRecognizer:" destination="7dt-jC-Z69" id="OMn-X4-vfP"/>
+                    </connections>
+                </panGestureRecognizer>
                 <pinchGestureRecognizer id="PXw-J5-Vmk">
                     <connections>
                         <action selector="handlePinchWithRecognizer:" destination="7dt-jC-Z69" id="chn-bm-XrU"/>

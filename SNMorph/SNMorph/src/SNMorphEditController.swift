@@ -78,4 +78,9 @@ class SNMorphEditController: UIViewController {
             self.viewMain.transform = xform
         }
     }
+    
+    @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
+        let ptMain = recognizer.location(in: viewMain)
+        print("pan", grid.map(pt: ptMain))
+    }
 }
