@@ -27,7 +27,7 @@ struct SNMorphGrid {
         cellSize = CGSize(width: image.size.width / CGFloat(slice.x),
                           height: image.size.height / CGFloat(slice.y))
         size = CGSize(width:cellSize.width * CGFloat(gridX),
-                                height:cellSize.height * CGFloat(gridX))
+                                height:cellSize.height * CGFloat(gridY))
         let length = 4 * Int(size.width) * Int(size.height)
         let data = NSMutableData(length: length)!
         let context = CGContext(data: data.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!

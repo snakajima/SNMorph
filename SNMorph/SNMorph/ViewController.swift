@@ -22,7 +22,7 @@ class ViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? SNMorphEditController {
-            vc.grid = SNMorphGrid(image: UIImage(named: "IMG_5417.JPG")!, slice:(x:8,y:8), border: 2)
+            vc.grid = SNMorphGrid(image: UIImage(named: "IMG_5417.JPG")!, slice:(x:8,y:6), border: 2)
         }
     }
 
