@@ -13,6 +13,8 @@
 		74B51B891D9FD62F005E71A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74B51B881D9FD62F005E71A9 /* Assets.xcassets */; };
 		74B51B8C1D9FD62F005E71A9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74B51B8A1D9FD62F005E71A9 /* LaunchScreen.storyboard */; };
 		74B51B941D9FD7C9005E71A9 /* IMG_5417.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 74B51B931D9FD7C9005E71A9 /* IMG_5417.JPG */; };
+		74B51B971D9FD887005E71A9 /* SNMorthEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B51B961D9FD887005E71A9 /* SNMorthEditController.swift */; };
+		74B51B991D9FD8A7005E71A9 /* SNMorthEditController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74B51B981D9FD8A7005E71A9 /* SNMorthEditController.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		74B51B8B1D9FD62F005E71A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		74B51B8D1D9FD62F005E71A9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		74B51B931D9FD7C9005E71A9 /* IMG_5417.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IMG_5417.JPG; sourceTree = "<group>"; };
+		74B51B961D9FD887005E71A9 /* SNMorthEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNMorthEditController.swift; sourceTree = "<group>"; };
+		74B51B981D9FD8A7005E71A9 /* SNMorthEditController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SNMorthEditController.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,7 @@
 		74B51B801D9FD62F005E71A9 /* SNMorph */ = {
 			isa = PBXGroup;
 			children = (
+				74B51B951D9FD84A005E71A9 /* src */,
 				74B51B811D9FD62F005E71A9 /* AppDelegate.swift */,
 				74B51B831D9FD62F005E71A9 /* ViewController.swift */,
 				74B51B851D9FD62F005E71A9 /* Main.storyboard */,
@@ -65,6 +70,15 @@
 				74B51B8D1D9FD62F005E71A9 /* Info.plist */,
 			);
 			path = SNMorph;
+			sourceTree = "<group>";
+		};
+		74B51B951D9FD84A005E71A9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				74B51B961D9FD887005E71A9 /* SNMorthEditController.swift */,
+				74B51B981D9FD8A7005E71A9 /* SNMorthEditController.storyboard */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -99,6 +113,7 @@
 				TargetAttributes = {
 					74B51B7D1D9FD62F005E71A9 = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = H34BY2CCCD;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -130,6 +145,7 @@
 				74B51B8C1D9FD62F005E71A9 /* LaunchScreen.storyboard in Resources */,
 				74B51B891D9FD62F005E71A9 /* Assets.xcassets in Resources */,
 				74B51B871D9FD62F005E71A9 /* Main.storyboard in Resources */,
+				74B51B991D9FD8A7005E71A9 /* SNMorthEditController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +158,7 @@
 			files = (
 				74B51B841D9FD62F005E71A9 /* ViewController.swift in Sources */,
 				74B51B821D9FD62F005E71A9 /* AppDelegate.swift in Sources */,
+				74B51B971D9FD887005E71A9 /* SNMorthEditController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +279,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = H34BY2CCCD;
 				INFOPLIST_FILE = SNMorph/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudreaders.SNMorph;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -274,7 +293,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = H34BY2CCCD;
 				INFOPLIST_FILE = SNMorph/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cloudreaders.SNMorph;
 				PRODUCT_NAME = "$(TARGET_NAME)";
