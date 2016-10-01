@@ -1,5 +1,5 @@
 //
-//  SNMorthEditController.swift
+//  SNMorphEditController.swift
 //  SNMorph
 //
 //  Created by satoshi on 10/1/16.
@@ -8,12 +8,22 @@
 
 import UIKit
 
-class SNMorthEditController: UIViewController {
+struct SNMorphDimention {
+    let x:Int
+    let y:Int
+}
+
+class SNMorphEditController: UIViewController {
+    public var image:UIImage!
+    public var dimention = SNMorphDimention(x: 4, y: 4)
+    
+    @IBOutlet var viewMain:UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("viewDidLoad")
+        viewMain.layer.contentsGravity = kCAGravityResizeAspect
+        viewMain.layer.contents = image.cgImage
     }
 
     override func didReceiveMemoryWarning() {

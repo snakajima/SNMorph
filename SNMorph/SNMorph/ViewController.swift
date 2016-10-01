@@ -20,6 +20,11 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? SNMorphEditController {
+            vc.image = UIImage(named: "IMG_5417.JPG")
+        }
+    }
 
 }
 
