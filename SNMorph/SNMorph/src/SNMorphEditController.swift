@@ -21,6 +21,8 @@ class SNMorphEditController: UIViewController {
     @IBOutlet var viewMain:UIView!
 
     private var xform = CGAffineTransform.identity
+    private var handles = [CALayer]()
+
     // Transient properties for handlePinch
     private var anchor = CGPoint.zero
     private var delta = CGPoint.zero
@@ -28,8 +30,23 @@ class SNMorphEditController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewMain.layer.contentsGravity = kCAGravityCenter
+        viewMain.layer.contentsGravity = kCAGravityBottomLeft
         viewMain.layer.contents = grid.cgImage
+        
+        let handleSize = CGSize(width: grid.cellSize.width/6.0, height: grid.cellSize.width/6.0)
+        for y in 0...grid.gridY {
+            for x in 0...grid.gridX {
+                let layer = CALayer()
+                let origin = CGPoint(x: CGFloat(x) * grid.cellSize.width - handleSize.width/2.0,
+                                    y: CGFloat(y) * grid.cellSize.height - handleSize.width/2.0)
+                layer.frame = CGRect(origin: origin, size: handleSize)
+                layer.cornerRadius = handleSize.width/2.0
+                layer.masksToBounds = true
+                layer.backgroundColor = UIColor.magenta.cgColor
+                handles.append(layer)
+                viewMain.layer.addSublayer(layer)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
