@@ -16,7 +16,7 @@ class SNMorphEditController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewMain.layer.contentsGravity = kCAGravityResizeAspect
+        viewMain.layer.contentsGravity = kCAGravityCenter
         viewMain.layer.contents = grid.cgImage
     }
 
