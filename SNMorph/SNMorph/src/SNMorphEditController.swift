@@ -17,7 +17,7 @@ class SNMorphEditController: UIViewController {
         super.viewDidLoad()
 
         viewMain.layer.contentsGravity = kCAGravityResizeAspect
-        viewMain.layer.contents = grid.image.cgImage
+        viewMain.layer.contents = grid.cgImage
     }
 
     override func didReceiveMemoryWarning() {
