@@ -17,6 +17,7 @@ struct SNMorphGrid {
     private let size:CGSize
     private let dataIn:NSData
     private let dataOut:NSMutableData
+    private let dataMap:NSMutableData
     private let bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue
                 | CGImageAlphaInfo.premultipliedLast.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
     init(image:UIImage, slice:(x:Int, y:Int), border:Int) {
@@ -34,10 +35,16 @@ struct SNMorphGrid {
         let origin = CGPoint(x:cellSize.width * CGFloat(border), y:cellSize.height * CGFloat(border))
         context.draw(image.cgImage!, in: CGRect(origin: origin, size:image.size))
         dataIn = data
-
         dataOut = NSMutableData(length: length)!
         memcpy(dataOut.mutableBytes, dataIn.bytes, length)
         
+        dataMap = NSMutableData(length: MemoryLayout<CGPoint>.size * Int(size.width) * Int(size.height))!
+        let pmap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
+        for y in 0..<Int(size.width) {
+            for x in 0..<Int(size.height) {
+                pmap[y * Int(size.width) + x] = CGPoint(x: CGFloat(x) * cellSize.width, y:CGFloat(y) * cellSize.height)
+            }
+        }
         updateImage()
     }
     
