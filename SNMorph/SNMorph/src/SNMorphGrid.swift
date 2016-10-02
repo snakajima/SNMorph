@@ -88,17 +88,24 @@ struct SNMorphGrid {
         func process(p1:CGPoint, p2:CGPoint) {
             let origin = CGPoint(x:round(min(p0.x, p1.x, p2.x)), y:round(min(p0.y, p1.y, p2.y)))
             let target = CGPoint(x:round(max(p0.x, p1.x, p2.x)), y:round(max(p0.y, p1.y, p2.y)))
+            let k = p2.x * p1.y - p1.x * p2.y
+            let d10 = p1.delta(from: p0)
+            let d20 = p2.delta(from: p0)
             for y in 0..<Int(target.y - origin.y) {
                 var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
                 for x in 0..<Int(target.x - origin.x) {
                     let pt = origin.translate(x: CGFloat(x), y: CGFloat(y))
-                    if p1.delta(from: p0).crossProduct(with: pt.delta(from: p0)) >= 0
+                    let d0 = pt.delta(from: p0)
+                    if d10.crossProduct(with: d0) >= 0
                       && p2.delta(from: p1).crossProduct(with: pt.delta(from: p1)) >= 0
                       && p0.delta(from: p2).crossProduct(with: pt.delta(from: p2)) >= 0 {
-                        bytesOut[offset] = 0
-                        bytesOut[offset+1] = 0
-                        bytesOut[offset+2] = 255
-                        bytesOut[offset+3] = 128
+                        let b = cellSize.width * (CGFloat(gy) + (d0.x * d10.y - d0.y * d10.x) / k)
+                        let a = cellSize.height * (CGFloat(gx) + (d0.y * d20.x - d0.x * d20.y) / k)
+                        let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
+                        bytesOut[offset] = bytesIn[offsetIn]
+                        bytesOut[offset+1] = bytesIn[offsetIn+1]
+                        bytesOut[offset+2] = bytesIn[offsetIn+2]
+                        bytesOut[offset+3] = bytesIn[offsetIn+3]
                     }
                     offset += 4
                 }
