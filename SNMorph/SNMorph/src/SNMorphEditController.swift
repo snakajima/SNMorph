@@ -27,6 +27,9 @@ class SNMorphEditController: UIViewController {
     private var anchor = CGPoint.zero
     private var delta = CGPoint.zero
 
+    // Transient properties for handlePan
+    private var handle:CALayer?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -81,6 +84,28 @@ class SNMorphEditController: UIViewController {
     
     @IBAction func handlePan(recognizer:UIPanGestureRecognizer) {
         let ptMain = recognizer.location(in: viewMain)
-        print("pan", grid.map(pt: ptMain))
+        switch(recognizer.state) {
+        case .began:
+            let pos = grid.map(pt: ptMain)
+            print("pan", pos)
+            let x = Int(round(pos.x)), y = Int(round(pos.y))
+            handle = handles[y * (grid.gridX + 1) + x]
+            break
+        case .changed:
+            if let handle = handle {
+                var rc = handle.frame
+                rc.origin.x = ptMain.x - rc.size.width/2.0
+                rc.origin.y = ptMain.y - rc.size.height/2.0
+                CATransaction.begin()
+                CATransaction.setAnimationDuration(0.0)
+                handle.frame = rc
+                CATransaction.commit()
+            }
+            break
+        case .ended:
+            break
+        default:
+            break
+        }
     }
 }
