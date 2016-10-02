@@ -81,8 +81,8 @@ struct SNMorphGrid {
         var ne = handles[x+1][y]
         var sw = handles[x][y+1]
         var se = handles[x+1][y+1]
-        let origin = CGPoint(x:min(nw.y, ne.y), y:min(nw.x, sw.x))
-        let target = CGPoint(x:max(sw.y, sw.y), y:max(ne.x, se.x))
+        let origin = CGPoint(x:min(nw.x, sw.x), y:min(nw.y, ne.y))
+        let target = CGPoint(x:max(ne.x, se.x), y:max(sw.y, sw.y))
         nw = nw.translate(x: -origin.x,y: -origin.y)
         ne = ne.translate(x: -origin.x,y: -origin.y)
         sw = sw.translate(x: -origin.x,y: -origin.y)
