@@ -16,9 +16,9 @@ struct SNMorphGrid {
     let cellSize:CGSize
     private let size:CGSize
     lazy private(set) var handles:[[CGPoint]] = {
-        return Array(0...self.gridX).map { (x) -> [CGPoint] in
-            Array(0...self.gridY).map { (y) -> CGPoint in
-                return CGPoint(x: CGFloat(x) * self.cellSize.width,
+        (0...self.gridX).map { (x) -> [CGPoint] in
+            (0...self.gridY).map { (y) -> CGPoint in
+                CGPoint(x: CGFloat(x) * self.cellSize.width,
                                     y: CGFloat(y) * self.cellSize.height)
             }
         }

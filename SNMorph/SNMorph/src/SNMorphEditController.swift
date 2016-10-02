@@ -40,8 +40,8 @@ class SNMorphEditController: UIViewController {
         viewMain.layer.contents = grid.cgImage
         
         let handleSize = CGSize(width: grid.cellSize.width/6.0, height: grid.cellSize.width/6.0)
-        layers = Array(0...grid.gridX).map { (x) -> [CALayer] in
-            return Array(0...grid.gridY).map { (y) -> CALayer in
+        layers = (0...grid.gridX).map { (x) -> [CALayer] in
+            (0...grid.gridY).map { (y) -> CALayer in
                 let layer = CALayer()
                 let origin = grid.handles[x][y].translate(x: -handleSize.width/2.0, y: -handleSize.height/2.0)
                 layer.frame = CGRect(origin: origin, size: handleSize)
