@@ -24,7 +24,7 @@ class SNMorphEditController: UIViewController {
     @IBOutlet var viewMain:UIView!
 
     private var xform = CGAffineTransform.identity
-    private var layers = [CALayer]()
+    private var layers = [[CALayer]]()
 
     // Transient properties for handlePinch
     private var anchor = CGPoint.zero
@@ -40,16 +40,16 @@ class SNMorphEditController: UIViewController {
         viewMain.layer.contents = grid.cgImage
         
         let handleSize = CGSize(width: grid.cellSize.width/6.0, height: grid.cellSize.width/6.0)
-        for y in 0...grid.gridY {
-            for x in 0...grid.gridX {
+        layers = Array(0...grid.gridX).map { (x) -> [CALayer] in
+            return Array(0...grid.gridY).map { (y) -> CALayer in
                 let layer = CALayer()
                 let origin = grid.handles[x][y].translate(x: -handleSize.width/2.0, y: -handleSize.height/2.0)
                 layer.frame = CGRect(origin: origin, size: handleSize)
                 layer.cornerRadius = handleSize.width/2.0
                 layer.masksToBounds = true
                 layer.backgroundColor = UIColor.magenta.cgColor
-                layers.append(layer)
                 viewMain.layer.addSublayer(layer)
+                return layer
             }
         }
     }
@@ -92,7 +92,7 @@ class SNMorphEditController: UIViewController {
             print("pan", pos)
             let x = Int(round(pos.x)), y = Int(round(pos.y))
             if 0 < x && x < grid.gridX && 0 < y && y < grid.gridY {
-                handle = (layer:layers[y * (grid.gridX + 1) + x], x:x, y:y)
+                handle = (layer:layers[x][y], x:x, y:y)
             }
             break
         case .changed:
