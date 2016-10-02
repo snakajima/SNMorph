@@ -88,9 +88,9 @@ struct SNMorphGrid {
         func process(p1:CGPoint, p2:CGPoint) {
             let origin = CGPoint(x:round(min(p0.x, p1.x, p2.x)), y:round(min(p0.y, p1.y, p2.y)))
             let target = CGPoint(x:round(max(p0.x, p1.x, p2.x)), y:round(max(p0.y, p1.y, p2.y)))
-            let k = p2.x * p1.y - p1.x * p2.y
             let d10 = p1.delta(from: p0)
             let d20 = p2.delta(from: p0)
+            let k = d20.x * d10.y - d10.x * d20.y
             for y in 0..<Int(target.y - origin.y) {
                 var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
                 for x in 0..<Int(target.x - origin.x) {
