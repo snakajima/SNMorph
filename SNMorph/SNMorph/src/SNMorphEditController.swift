@@ -31,7 +31,7 @@ class SNMorphEditController: UIViewController {
     private var delta = CGPoint.zero
 
     // Transient properties for handlePan
-    private var handle:CALayer?
+    private var handle:(layer:CALayer, x:Int, y:Int)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,23 +91,32 @@ class SNMorphEditController: UIViewController {
             let pos = grid.map(pt: ptMain)
             print("pan", pos)
             let x = Int(round(pos.x)), y = Int(round(pos.y))
-            handle = handles[y * (grid.gridX + 1) + x]
+            if 0 < x && x < grid.gridX && 0 < y && y < grid.gridY {
+                handle = (layer:handles[y * (grid.gridX + 1) + x], x:x, y:y)
+            }
             break
         case .changed:
             if let handle = handle {
-                var rc = handle.frame
-                rc.origin.x = ptMain.x - rc.size.width/2.0
-                rc.origin.y = ptMain.y - rc.size.height/2.0
+                var rc = handle.layer.frame
+                rc.origin = ptMain.translate(x: -rc.size.width/2.0, y: -rc.size.height/2.0)
                 CATransaction.begin()
                 CATransaction.setAnimationDuration(0.0)
-                handle.frame = rc
+                handle.layer.frame = rc
                 CATransaction.commit()
             }
-            break
         case .ended:
-            break
+            if let handle = handle {
+                var rc = handle.layer.frame
+                rc.origin = ptMain.translate(x: -rc.size.width/2.0, y: -rc.size.height/2.0)
+                CATransaction.begin()
+                CATransaction.setAnimationDuration(0.0)
+                handle.layer.frame = rc
+                CATransaction.commit()
+                grid.undateHandle(x: handle.x, y: handle.y, pt: ptMain)
+            }
+            handle = nil
         default:
-            break
+            handle = nil
         }
     }
 }

@@ -15,7 +15,7 @@ struct SNMorphGrid {
     let gridX:Int, gridY:Int
     let cellSize:CGSize
     private let size:CGSize
-    lazy var handles:[[CGPoint]] = {
+    lazy private(set) var handles:[[CGPoint]] = {
         return Array(0...self.gridX).map { (x) -> [CGPoint] in
             Array(0...self.gridY).map { (y) -> CGPoint in
                 return CGPoint(x: CGFloat(x) * self.cellSize.width,
@@ -65,5 +65,10 @@ struct SNMorphGrid {
     func map(pt:CGPoint) -> CGPoint {
         let pmap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         return pmap[Int(pt.y) * Int(size.width) + Int(pt.x)]
+    }
+    
+    mutating func undateHandle(x:Int, y:Int, pt:CGPoint) {
+        handles[x][y] = pt
+        print("updateHandle")
     }
 }
