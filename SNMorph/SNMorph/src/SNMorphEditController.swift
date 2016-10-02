@@ -24,7 +24,7 @@ class SNMorphEditController: UIViewController {
     @IBOutlet var viewMain:UIView!
 
     private var xform = CGAffineTransform.identity
-    private var handles = [CALayer]()
+    private var layers = [CALayer]()
 
     // Transient properties for handlePinch
     private var anchor = CGPoint.zero
@@ -48,7 +48,7 @@ class SNMorphEditController: UIViewController {
                 layer.cornerRadius = handleSize.width/2.0
                 layer.masksToBounds = true
                 layer.backgroundColor = UIColor.magenta.cgColor
-                handles.append(layer)
+                layers.append(layer)
                 viewMain.layer.addSublayer(layer)
             }
         }
@@ -92,7 +92,7 @@ class SNMorphEditController: UIViewController {
             print("pan", pos)
             let x = Int(round(pos.x)), y = Int(round(pos.y))
             if 0 < x && x < grid.gridX && 0 < y && y < grid.gridY {
-                handle = (layer:handles[y * (grid.gridX + 1) + x], x:x, y:y)
+                handle = (layer:layers[y * (grid.gridX + 1) + x], x:x, y:y)
             }
             break
         case .changed:
