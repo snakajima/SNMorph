@@ -93,8 +93,10 @@ struct SNMorphGrid {
         let dse = se.delta(from: nw)
         let x1 = dne.x, y1 = dne.y
         let x2 = dse.x, y2 = dse.y
-        let k = x2 * y1 - x1 * y2
-        guard k != 0.0 else {
+        let x3 = dsw.x, y3 = dsw.y
+        let k1 = x2 * y1 - x1 * y2
+        let k2 = x3 * y2 - x2 * y3
+        guard k1 != 0.0 && k2 != 0.0 else {
             return
         }
         let bytesPerRow = 4 * Int(size.width)
@@ -104,9 +106,18 @@ struct SNMorphGrid {
                 let pt = CGPoint(x: x, y: y).delta(from: nw)
                 let p = pt.x, q = pt.y
                 if pt.crossProduct(with: dse) >= 0 {
-                    let b = cellSize.width * (CGFloat(gy) + (p * y1 - q * x1) / k)
-                    let a = cellSize.height * (CGFloat(gx) + (q * x2 - p * y2) / k)
-                    print("a,b", x, y, a, b)
+                    let b = cellSize.width * (CGFloat(gy) + (p * y1 - q * x1) / k1)
+                    let a = cellSize.height * (CGFloat(gx) + (q * x2 - p * y2) / k1)
+                    //print("a,b", x, y, a, b)
+                    let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
+                    bytesOut[offset] = bytesIn[offsetIn]
+                    bytesOut[offset+1] = bytesIn[offsetIn+1]
+                    bytesOut[offset+2] = bytesIn[offsetIn+2]
+                    bytesOut[offset+3] = bytesIn[offsetIn+3]
+                } else {
+                    let b = cellSize.width * (CGFloat(gy) + (p * y2 - q * x2) / k2)
+                    let a = cellSize.height * (CGFloat(gx) + (q * x3 - p * y3) / k2)
+                    // print("a,b", x, y, a, b)
                     let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
                     bytesOut[offset] = bytesIn[offsetIn]
                     bytesOut[offset+1] = bytesIn[offsetIn+1]
