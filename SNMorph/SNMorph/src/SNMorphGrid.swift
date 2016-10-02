@@ -93,12 +93,11 @@ struct SNMorphGrid {
                 let d1 = pt.delta(from: nw)
                 let d2 = se.delta(from: nw)
                 let offset = 4 * Int(size.width) * (Int(origin.y) + y) + 4 * (Int(origin.x) + x)
-                bytes[offset] = 0
-                bytes[offset+1] = 0
-                bytes[offset+2] = 255
-                bytes[offset+3] = 128
-                if d1.crossProduct(with: d2) < 0 {
-                    //print("x, y", d1, d2, x, y)
+                if d1.crossProduct(with: d2) >= 0 {
+                    bytes[offset] = 0
+                    bytes[offset+1] = 0
+                    bytes[offset+2] = 255
+                    bytes[offset+3] = 128
                 }
             }
         }
