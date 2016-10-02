@@ -76,7 +76,8 @@ struct SNMorphGrid {
     }
     
     mutating func updateGrid(x:Int, y:Int) {
-        let bytes = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
+        let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
+        let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
         var nw = handles[x][y]
         var ne = handles[x+1][y]
         var sw = handles[x][y+1]
@@ -88,17 +89,18 @@ struct SNMorphGrid {
         sw = sw.translate(x: -origin.x,y: -origin.y)
         se = se.translate(x: -origin.x,y: -origin.y)
         for y in 0..<Int(target.y - origin.y) {
+            var offset = 4 * Int(size.width) * (Int(origin.y) + y) + 4 * Int(origin.x)
             for x in 0..<Int(target.x - origin.x) {
                 let pt = CGPoint(x: x, y: y)
                 let d1 = pt.delta(from: nw)
                 let d2 = se.delta(from: nw)
-                let offset = 4 * Int(size.width) * (Int(origin.y) + y) + 4 * (Int(origin.x) + x)
                 if d1.crossProduct(with: d2) >= 0 {
-                    bytes[offset] = 0
-                    bytes[offset+1] = 0
-                    bytes[offset+2] = 255
-                    bytes[offset+3] = 128
+                    bytesOut[offset] = 0
+                    bytesOut[offset+1] = 0
+                    bytesOut[offset+2] = 255
+                    bytesOut[offset+3] = 128
                 }
+                offset += 4
             }
         }
         updateImage()
