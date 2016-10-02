@@ -91,14 +91,16 @@ struct SNMorphGrid {
             let d10 = p1.delta(from: p0)
             let d20 = p2.delta(from: p0)
             let k = d20.x * d10.y - d10.x * d20.y
+            let d21 = p2.delta(from: p1)
+            let d02 = p0.delta(from: p2)
             for y in 0..<Int(target.y - origin.y) {
                 var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
                 for x in 0..<Int(target.x - origin.x) {
                     let pt = origin.translate(x: CGFloat(x), y: CGFloat(y))
                     let d0 = pt.delta(from: p0)
                     if d10.crossProduct(with: d0) >= 0
-                      && p2.delta(from: p1).crossProduct(with: pt.delta(from: p1)) >= 0
-                      && p0.delta(from: p2).crossProduct(with: pt.delta(from: p2)) >= 0 {
+                      && d21.crossProduct(with: pt.delta(from: p1)) >= 0
+                      && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
                         let b = cellSize.width * (CGFloat(gy) + (d0.x * d10.y - d0.y * d10.x) / k)
                         let a = cellSize.height * (CGFloat(gx) + (d0.y * d20.x - d0.x * d20.y) / k)
                         let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
