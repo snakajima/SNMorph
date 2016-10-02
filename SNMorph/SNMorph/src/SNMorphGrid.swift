@@ -75,13 +75,13 @@ struct SNMorphGrid {
         updateGrid(x: x, y: y)
     }
     
-    mutating func updateGrid(x:Int, y:Int) {
+    mutating func updateGrid(x gx:Int, y gy:Int) {
         let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
         let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
-        var nw = handles[x][y]
-        var ne = handles[x+1][y]
-        var sw = handles[x][y+1]
-        var se = handles[x+1][y+1]
+        var nw = handles[gx][gy]
+        var ne = handles[gx+1][gy]
+        var sw = handles[gx][gy+1]
+        var se = handles[gx+1][gy+1]
         let origin = CGPoint(x:min(nw.x, sw.x), y:min(nw.y, ne.y))
         let target = CGPoint(x:max(ne.x, se.x), y:max(sw.y, sw.y))
         nw = nw.delta(from: origin)
@@ -91,7 +91,9 @@ struct SNMorphGrid {
         let dne = ne.delta(from: nw)
         let dsw = sw.delta(from: nw)
         let dse = se.delta(from: nw)
-        let k = dse.x * dne.y - dne.x * dse.y
+        let x1 = dne.x, y1 = dne.y
+        let x2 = dse.x, y2 = dse.y
+        let k = x2 * y1 - x1 * y2
         guard k != 0.0 else {
             return
         }
@@ -100,9 +102,10 @@ struct SNMorphGrid {
             var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
             for x in 0..<Int(target.x - origin.x) {
                 let pt = CGPoint(x: x, y: y).delta(from: nw)
+                let p = pt.x, q = pt.y
                 if pt.crossProduct(with: dse) >= 0 {
-                    let a = origin.x + nw.x + cellSize.width * (pt.y * dse.y - pt.x * dse.y) / k
-                    let b = origin.y + nw.y + cellSize.height * (pt.x * dne.y - pt.y * dne.x) / k
+                    let b = cellSize.width * (CGFloat(gy) + (p * y1 - q * x1) / k)
+                    let a = cellSize.height * (CGFloat(gx) + (q * x2 - p * y2) / k)
                     print("a,b", x, y, a, b)
                     let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
                     bytesOut[offset] = bytesIn[offsetIn]
