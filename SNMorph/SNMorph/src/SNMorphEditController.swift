@@ -13,6 +13,9 @@ private extension CGPoint {
     func delta(from:CGPoint) -> CGPoint {
         return CGPoint(x: self.x - from.x, y: self.y - from.y)
     }
+    func translate(x:CGFloat, y:CGFloat) -> CGPoint {
+        return CGPoint(x: self.x + x, y: self.y + y)
+    }
 }
 
 class SNMorphEditController: UIViewController {
@@ -40,8 +43,7 @@ class SNMorphEditController: UIViewController {
         for y in 0...grid.gridY {
             for x in 0...grid.gridX {
                 let layer = CALayer()
-                let origin = CGPoint(x: CGFloat(x) * grid.cellSize.width - handleSize.width/2.0,
-                                    y: CGFloat(y) * grid.cellSize.height - handleSize.width/2.0)
+                let origin = grid.handles[x][y].translate(x: -handleSize.width/2.0, y: -handleSize.height/2.0)
                 layer.frame = CGRect(origin: origin, size: handleSize)
                 layer.cornerRadius = handleSize.width/2.0
                 layer.masksToBounds = true

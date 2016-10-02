@@ -15,6 +15,14 @@ struct SNMorphGrid {
     let gridX:Int, gridY:Int
     let cellSize:CGSize
     private let size:CGSize
+    lazy var handles:[[CGPoint]] = {
+        return Array(0...self.gridX).map { (x) -> [CGPoint] in
+            Array(0...self.gridY).map { (y) -> CGPoint in
+                return CGPoint(x: CGFloat(x) * self.cellSize.width,
+                                    y: CGFloat(y) * self.cellSize.height)
+            }
+        }
+    }()
     private let dataIn:NSData
     private let dataOut:NSMutableData
     private let dataMap:NSMutableData
@@ -32,6 +40,7 @@ struct SNMorphGrid {
         let length = 4 * Int(size.width) * Int(size.height)
         let data = NSMutableData(length: length)!
         let context = CGContext(data: data.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
+        
         let origin = CGPoint(x:cellSize.width * CGFloat(border), y:cellSize.height * CGFloat(border))
         context.draw(image.cgImage!, in: CGRect(origin: origin, size:image.size))
         dataIn = data
