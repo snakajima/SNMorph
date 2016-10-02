@@ -84,17 +84,19 @@ struct SNMorphGrid {
         var se = handles[x+1][y+1]
         let origin = CGPoint(x:min(nw.x, sw.x), y:min(nw.y, ne.y))
         let target = CGPoint(x:max(ne.x, se.x), y:max(sw.y, sw.y))
-        nw = nw.translate(x: -origin.x,y: -origin.y)
-        ne = ne.translate(x: -origin.x,y: -origin.y)
-        sw = sw.translate(x: -origin.x,y: -origin.y)
-        se = se.translate(x: -origin.x,y: -origin.y)
+        nw = nw.delta(from: origin)
+        ne = ne.delta(from: origin)
+        sw = sw.delta(from: origin)
+        se = se.delta(from: origin)
+        let dne = ne.delta(from: nw)
+        let dsw = sw.delta(from: nw)
+        let dse = se.delta(from: nw)
         for y in 0..<Int(target.y - origin.y) {
             var offset = 4 * Int(size.width) * (Int(origin.y) + y) + 4 * Int(origin.x)
             for x in 0..<Int(target.x - origin.x) {
                 let pt = CGPoint(x: x, y: y)
                 let d1 = pt.delta(from: nw)
-                let d2 = se.delta(from: nw)
-                if d1.crossProduct(with: d2) >= 0 {
+                if d1.crossProduct(with: dse) >= 0 {
                     bytesOut[offset] = 0
                     bytesOut[offset+1] = 0
                     bytesOut[offset+2] = 255
