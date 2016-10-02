@@ -85,7 +85,13 @@ struct SNMorphGrid {
         let ptS = handles[gx][gy+1]
         let ptW = handles[gx-1][gy]
         let ptE = handles[gx+1][gy]
-        func process(p1:CGPoint, p2:CGPoint) {
+        struct Matrix4 {
+            let x0:CGFloat
+            let x1:CGFloat
+            let y0:CGFloat
+            let y1:CGFloat
+        }
+        func process(p1:CGPoint, p2:CGPoint, matrix:Matrix4) {
             let origin = CGPoint(x:round(min(p0.x, p1.x, p2.x)), y:round(min(p0.y, p1.y, p2.y)))
             let target = CGPoint(x:round(max(p0.x, p1.x, p2.x)), y:round(max(p0.y, p1.y, p2.y)))
             let d10 = p1.delta(from: p0)
@@ -101,8 +107,10 @@ struct SNMorphGrid {
                     if d10.crossProduct(with: d0) >= 0
                       && d21.crossProduct(with: pt.delta(from: p1)) >= 0
                       && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
-                        let b = cellSize.width * (CGFloat(gy) + (d0.x * d10.y - d0.y * d10.x) / k)
-                        let a = cellSize.height * (CGFloat(gx) + (d0.y * d20.x - d0.x * d20.y) / k)
+                        var a = (d0.y * d20.x - d0.x * d20.y) / k
+                        var b = (d0.x * d10.y - d0.y * d10.x) / k
+                        a = cellSize.height * (CGFloat(gx) + matrix.x0 * a + matrix.x1 * b)
+                        b = cellSize.width * (CGFloat(gy) + matrix.y0 * a + matrix.y1 * b)
                         let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
                         bytesOut[offset] = bytesIn[offsetIn]
                         bytesOut[offset+1] = bytesIn[offsetIn+1]
@@ -113,7 +121,10 @@ struct SNMorphGrid {
                 }
             }
         }
-        process(p1:ptE, p2:ptS)
+        process(p1:ptE, p2:ptS, matrix:Matrix4(x0: 1,x1: 0,y0: 0,y1: 1))
+        //process(p1:ptS, p2:ptW, matrix:Matrix4(x0: 0,x1: -1,y0: 1,y1: 0))
+        process(p1:ptW, p2:ptN, matrix:Matrix4(x0: -1,x1: 0,y0: 0,y1: -1))
+        //process(p1:ptN, p2:ptE, matrix:Matrix4(x0: 0,x1: 1,y0: -1,y1: 0))
 
         updateImage()
     }
