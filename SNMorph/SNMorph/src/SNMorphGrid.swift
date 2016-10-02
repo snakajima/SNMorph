@@ -74,8 +74,37 @@ struct SNMorphGrid {
         handles[x][y] = pt
         updateGrid(x: x, y: y)
     }
-    
+
     mutating func updateGrid(x gx:Int, y gy:Int) {
+        let bytesPerRow = 4 * Int(size.width)
+        let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
+        let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
+
+        let p0 = handles[gx][gy]
+        let ptN = handles[gx][gy-1]
+        let ptS = handles[gx][gy+1]
+        let ptW = handles[gx-1][gy]
+        let ptE = handles[gx+1][gy]
+        func process(p1:CGPoint, p2:CGPoint) {
+            let origin = CGPoint(x:min(p0.x, p1.x, p2.x), y:min(p0.y, p1.y, p2.y))
+            let target = CGPoint(x:max(p0.x, p1.x, p2.x), y:max(p0.y, p1.y, p2.y))
+            for y in 0..<Int(target.y - origin.y) {
+                var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
+                for x in 0..<Int(target.x - origin.x) {
+                    bytesOut[offset] = 0
+                    bytesOut[offset+1] = 0
+                    bytesOut[offset+2] = 255
+                    bytesOut[offset+3] = 128
+                    offset += 4
+                }
+            }
+        }
+        process(p1:ptE, p2:ptS)
+
+        updateImage()
+    }
+    
+    mutating func updateGrid2(x gx:Int, y gy:Int) {
         let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
         let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
         var nw = handles[gx][gy]
