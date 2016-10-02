@@ -8,16 +8,6 @@
 
 import UIKit
 
-// from SNDraw
-private extension CGPoint {
-    func delta(from:CGPoint) -> CGPoint {
-        return CGPoint(x: self.x - from.x, y: self.y - from.y)
-    }
-    func translate(x:CGFloat, y:CGFloat) -> CGPoint {
-        return CGPoint(x: self.x + x, y: self.y + y)
-    }
-}
-
 class SNMorphEditController: UIViewController {
     public var grid:SNMorphGrid!
     
@@ -113,6 +103,7 @@ class SNMorphEditController: UIViewController {
                 handle.layer.frame = rc
                 CATransaction.commit()
                 grid.undateHandle(x: handle.x, y: handle.y, pt: ptMain)
+                viewMain.layer.contents = grid.cgImage
             }
             handle = nil
         default:

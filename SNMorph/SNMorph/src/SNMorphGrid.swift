@@ -68,7 +68,40 @@ struct SNMorphGrid {
     }
     
     mutating func undateHandle(x:Int, y:Int, pt:CGPoint) {
+        guard 0 < x && x < gridX && 0 < y && y < gridY else {
+            return
+        }
         handles[x][y] = pt
-        print("updateHandle")
+        updateGrid(x: x, y: y)
+    }
+    
+    mutating func updateGrid(x:Int, y:Int) {
+        let bytes = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
+        var nw = handles[x][y]
+        var ne = handles[x+1][y]
+        var sw = handles[x][y+1]
+        var se = handles[x+1][y+1]
+        let origin = CGPoint(x:min(nw.y, ne.y), y:min(nw.x, sw.x))
+        let target = CGPoint(x:max(sw.y, sw.y), y:max(ne.x, se.x))
+        nw = nw.translate(x: -origin.x,y: -origin.y)
+        ne = ne.translate(x: -origin.x,y: -origin.y)
+        sw = sw.translate(x: -origin.x,y: -origin.y)
+        se = se.translate(x: -origin.x,y: -origin.y)
+        for y in 0..<Int(target.y - origin.y) {
+            for x in 0..<Int(target.x - origin.x) {
+                let pt = CGPoint(x: x, y: y)
+                let d1 = pt.delta(from: nw)
+                let d2 = se.delta(from: nw)
+                let offset = 4 * Int(size.width) * (Int(origin.y) + y) + 4 * (Int(origin.x) + x)
+                bytes[offset] = 0
+                bytes[offset+1] = 0
+                bytes[offset+2] = 255
+                bytes[offset+3] = 128
+                if d1.crossProduct(with: d2) < 0 {
+                    //print("x, y", d1, d2, x, y)
+                }
+            }
+        }
+        updateImage()
     }
 }

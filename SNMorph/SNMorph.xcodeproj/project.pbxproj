@@ -16,6 +16,7 @@
 		74B51B971D9FD887005E71A9 /* SNMorphEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B51B961D9FD887005E71A9 /* SNMorphEditController.swift */; };
 		74B51B991D9FD8A7005E71A9 /* SNMorphEditController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74B51B981D9FD8A7005E71A9 /* SNMorphEditController.storyboard */; };
 		74B51B9B1DA053D5005E71A9 /* SNMorphGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B51B9A1DA053D5005E71A9 /* SNMorphGrid.swift */; };
+		74B51B9D1DA0E909005E71A9 /* SNPoint+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B51B9C1DA0E909005E71A9 /* SNPoint+Ex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		74B51B961D9FD887005E71A9 /* SNMorphEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNMorphEditController.swift; sourceTree = "<group>"; };
 		74B51B981D9FD8A7005E71A9 /* SNMorphEditController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SNMorphEditController.storyboard; sourceTree = "<group>"; };
 		74B51B9A1DA053D5005E71A9 /* SNMorphGrid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SNMorphGrid.swift; sourceTree = "<group>"; };
+		74B51B9C1DA0E909005E71A9 /* SNPoint+Ex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SNPoint+Ex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 		74B51B951D9FD84A005E71A9 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				74B51B9C1DA0E909005E71A9 /* SNPoint+Ex.swift */,
 				74B51B961D9FD887005E71A9 /* SNMorphEditController.swift */,
 				74B51B9A1DA053D5005E71A9 /* SNMorphGrid.swift */,
 				74B51B981D9FD8A7005E71A9 /* SNMorphEditController.storyboard */,
@@ -163,6 +166,7 @@
 				74B51B9B1DA053D5005E71A9 /* SNMorphGrid.swift in Sources */,
 				74B51B821D9FD62F005E71A9 /* AppDelegate.swift in Sources */,
 				74B51B971D9FD887005E71A9 /* SNMorphEditController.swift in Sources */,
+				74B51B9D1DA0E909005E71A9 /* SNPoint+Ex.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
