@@ -107,11 +107,11 @@ struct SNMorphGrid {
                     if d10.crossProduct(with: d0) >= 0
                       && d21.crossProduct(with: pt.delta(from: p1)) >= 0
                       && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
-                        var a = (d0.y * d20.x - d0.x * d20.y) / k
-                        var b = (d0.x * d10.y - d0.y * d10.x) / k
-                        a = cellSize.height * (CGFloat(gx) + matrix.x0 * a + matrix.x1 * b)
-                        b = cellSize.width * (CGFloat(gy) + matrix.y0 * a + matrix.y1 * b)
-                        let offsetIn = bytesPerRow * Int(b) + 4 * Int(a)
+                        let a = (d0.y * d20.x - d0.x * d20.y) / k
+                        let b = (d0.x * d10.y - d0.y * d10.x) / k
+                        let c = CGFloat(gx) + matrix.x0 * a + matrix.x1 * b
+                        let d = CGFloat(gy) + matrix.y0 * a + matrix.y1 * b
+                        let offsetIn = bytesPerRow * Int(cellSize.height * d) + 4 * Int(cellSize.width * c)
                         bytesOut[offset] = bytesIn[offsetIn]
                         bytesOut[offset+1] = bytesIn[offsetIn+1]
                         bytesOut[offset+2] = bytesIn[offsetIn+2]
@@ -122,9 +122,9 @@ struct SNMorphGrid {
             }
         }
         process(p1:ptE, p2:ptS, matrix:Matrix4(x0: 1,x1: 0,y0: 0,y1: 1))
-        //process(p1:ptS, p2:ptW, matrix:Matrix4(x0: 0,x1: -1,y0: 1,y1: 0))
+        process(p1:ptS, p2:ptW, matrix:Matrix4(x0: 0,x1: -1,y0: 1,y1: 0))
         process(p1:ptW, p2:ptN, matrix:Matrix4(x0: -1,x1: 0,y0: 0,y1: -1))
-        //process(p1:ptN, p2:ptE, matrix:Matrix4(x0: 0,x1: 1,y0: -1,y1: 0))
+        process(p1:ptN, p2:ptE, matrix:Matrix4(x0: 0,x1: 1,y0: -1,y1: 0))
 
         updateImage()
     }
