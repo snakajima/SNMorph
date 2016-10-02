@@ -86,15 +86,20 @@ struct SNMorphGrid {
         let ptW = handles[gx-1][gy]
         let ptE = handles[gx+1][gy]
         func process(p1:CGPoint, p2:CGPoint) {
-            let origin = CGPoint(x:min(p0.x, p1.x, p2.x), y:min(p0.y, p1.y, p2.y))
-            let target = CGPoint(x:max(p0.x, p1.x, p2.x), y:max(p0.y, p1.y, p2.y))
+            let origin = CGPoint(x:round(min(p0.x, p1.x, p2.x)), y:round(min(p0.y, p1.y, p2.y)))
+            let target = CGPoint(x:round(max(p0.x, p1.x, p2.x)), y:round(max(p0.y, p1.y, p2.y)))
             for y in 0..<Int(target.y - origin.y) {
                 var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
                 for x in 0..<Int(target.x - origin.x) {
-                    bytesOut[offset] = 0
-                    bytesOut[offset+1] = 0
-                    bytesOut[offset+2] = 255
-                    bytesOut[offset+3] = 128
+                    let pt = origin.translate(x: CGFloat(x), y: CGFloat(y))
+                    if p1.delta(from: p0).crossProduct(with: pt.delta(from: p0)) >= 0
+                      && p2.delta(from: p1).crossProduct(with: pt.delta(from: p1)) >= 0
+                      && p0.delta(from: p2).crossProduct(with: pt.delta(from: p2)) >= 0 {
+                        bytesOut[offset] = 0
+                        bytesOut[offset+1] = 0
+                        bytesOut[offset+2] = 255
+                        bytesOut[offset+3] = 128
+                    }
                     offset += 4
                 }
             }
