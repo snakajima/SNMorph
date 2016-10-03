@@ -107,14 +107,13 @@ struct SNMorphGrid {
                       && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
                         let a = (d0.y * d20.x - d0.x * d20.y) / k
                         let b = (d0.x * d10.y - d0.y * d10.x) / k
-                        let c = CGFloat(gx) + CGFloat(dir) * a
-                        let d = CGFloat(gy) + CGFloat(dir) * b
-                        let offsetIn = bytesPerRow * Int(round(cellSize.height * d)) + 4 * Int(round(cellSize.width * c))
+                        let ptMap = CGPoint(x: CGFloat(gx) + CGFloat(dir) * a, y: CGFloat(gy) + CGFloat(dir) * b)
+                        let offsetIn = bytesPerRow * Int(round(cellSize.height * ptMap.y)) + 4 * Int(round(cellSize.width * ptMap.x))
                         bytesOut[offsetOut] = bytesIn[offsetIn]
-                        bytesOut[offsetOut+1] = bytesIn[offsetIn+1]
-                        bytesOut[offsetOut+2] = bytesIn[offsetIn+2]
-                        bytesOut[offsetOut+3] = bytesIn[offsetIn+3]
-                        bytesMap[offsetMap + x] = CGPoint(x: c, y: d)
+                        bytesOut[offsetOut + 1] = bytesIn[offsetIn + 1]
+                        bytesOut[offsetOut + 2] = bytesIn[offsetIn + 2]
+                        bytesOut[offsetOut + 3] = bytesIn[offsetIn + 3]
+                        bytesMap[offsetMap + x] = ptMap
                     }
                     offsetOut += 4
                 }
