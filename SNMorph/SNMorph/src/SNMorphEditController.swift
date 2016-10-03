@@ -93,6 +93,8 @@ class SNMorphEditController: UIViewController {
                 CATransaction.setAnimationDuration(0.0)
                 handle.layer.frame = rc
                 CATransaction.commit()
+                grid.undateHandle(x: handle.x, y: handle.y, pt: ptMain)
+                viewMain.layer.contents = grid.cgImage
             }
         case .ended:
             if let handle = handle {
