@@ -48,10 +48,10 @@ struct SNMorphGrid {
         memcpy(dataOut.mutableBytes, dataIn.bytes, length)
         
         dataMap = NSMutableData(length: MemoryLayout<CGPoint>.size * Int(size.width) * Int(size.height))!
-        let pmap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
+        let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         for y in 0..<Int(size.width) {
             for x in 0..<Int(size.height) {
-                pmap[y * Int(size.width) + x] = CGPoint(x: CGFloat(x) / cellSize.width, y:CGFloat(y) / cellSize.height)
+                bytesMap[y * Int(size.width) + x] = CGPoint(x: CGFloat(x) / cellSize.width, y:CGFloat(y) / cellSize.height)
             }
         }
         updateImage()
@@ -63,8 +63,8 @@ struct SNMorphGrid {
     }
     
     func map(pt:CGPoint) -> CGPoint {
-        let pmap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
-        return pmap[Int(pt.y) * Int(size.width) + Int(pt.x)]
+        let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
+        return bytesMap[Int(pt.y) * Int(size.width) + Int(pt.x)]
     }
     
     mutating func undateHandle(x:Int, y:Int, pt:CGPoint) {
@@ -79,6 +79,7 @@ struct SNMorphGrid {
         let bytesPerRow = 4 * Int(size.width)
         let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
         let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
+        let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         
         func update(gx:Int, gy:Int, dir:Int) {
             let p0 = handles[gx][gy]
@@ -112,6 +113,7 @@ struct SNMorphGrid {
                         bytesOut[offset+1] = bytesIn[offsetIn+1]
                         bytesOut[offset+2] = bytesIn[offsetIn+2]
                         bytesOut[offset+3] = bytesIn[offsetIn+3]
+                        bytesMap[(origin.y + y) * Int(size.width) + origin.x + x] = CGPoint(x: c, y: d)
                     }
                     offset += 4
                 }
