@@ -97,7 +97,8 @@ struct SNMorphGrid {
             let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
             let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
             for y in 0..<Int(target.y - origin.y) {
-                var offset = bytesPerRow * (origin.y + y) + 4 * (origin.x)
+                var offsetOut = bytesPerRow * (origin.y + y) + 4 * (origin.x)
+                let offsetMap = (origin.y + y) * Int(size.width) + origin.x
                 for x in 0..<(target.x - origin.x) {
                     let pt = CGPoint(x: CGFloat(origin.x + x), y: CGFloat(origin.y + y))
                     let d0 = pt.delta(from: p0)
@@ -109,13 +110,13 @@ struct SNMorphGrid {
                         let c = CGFloat(gx) + CGFloat(dir) * a
                         let d = CGFloat(gy) + CGFloat(dir) * b
                         let offsetIn = bytesPerRow * Int(round(cellSize.height * d)) + 4 * Int(round(cellSize.width * c))
-                        bytesOut[offset] = bytesIn[offsetIn]
-                        bytesOut[offset+1] = bytesIn[offsetIn+1]
-                        bytesOut[offset+2] = bytesIn[offsetIn+2]
-                        bytesOut[offset+3] = bytesIn[offsetIn+3]
-                        bytesMap[(origin.y + y) * Int(size.width) + origin.x + x] = CGPoint(x: c, y: d)
+                        bytesOut[offsetOut] = bytesIn[offsetIn]
+                        bytesOut[offsetOut+1] = bytesIn[offsetIn+1]
+                        bytesOut[offsetOut+2] = bytesIn[offsetIn+2]
+                        bytesOut[offsetOut+3] = bytesIn[offsetIn+3]
+                        bytesMap[offsetMap + x] = CGPoint(x: c, y: d)
                     }
-                    offset += 4
+                    offsetOut += 4
                 }
             }
         }
