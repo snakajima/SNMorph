@@ -92,17 +92,17 @@ struct SNMorphGrid {
             let y1:CGFloat
         }
         func process(p1:CGPoint, p2:CGPoint, matrix:Matrix4) {
-            let origin = CGPoint(x:round(min(p0.x, p1.x, p2.x)), y:round(min(p0.y, p1.y, p2.y)))
-            let target = CGPoint(x:round(max(p0.x, p1.x, p2.x)), y:round(max(p0.y, p1.y, p2.y)))
+            let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
+            let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
             let d10 = p1.delta(from: p0)
             let d20 = p2.delta(from: p0)
             let k = d20.x * d10.y - d10.x * d20.y
             let d21 = p2.delta(from: p1)
             let d02 = p0.delta(from: p2)
             for y in 0..<Int(target.y - origin.y) {
-                var offset = bytesPerRow * (Int(origin.y) + y) + 4 * Int(origin.x)
-                for x in 0..<Int(target.x - origin.x) {
-                    let pt = origin.translate(x: CGFloat(x), y: CGFloat(y))
+                var offset = bytesPerRow * (origin.y + y) + 4 * (origin.x)
+                for x in 0..<(target.x - origin.x) {
+                    let pt = CGPoint(x: CGFloat(origin.x + x), y: CGFloat(origin.y + y))
                     let d0 = pt.delta(from: p0)
                     if d10.crossProduct(with: d0) >= 0
                       && d21.crossProduct(with: pt.delta(from: p1)) >= 0
@@ -111,7 +111,7 @@ struct SNMorphGrid {
                         let b = (d0.x * d10.y - d0.y * d10.x) / k
                         let c = CGFloat(gx) + matrix.x0 * a + matrix.x1 * b
                         let d = CGFloat(gy) + matrix.y0 * a + matrix.y1 * b
-                        let offsetIn = bytesPerRow * Int(cellSize.height * d) + 4 * Int(cellSize.width * c)
+                        let offsetIn = bytesPerRow * Int(round(cellSize.height * d)) + 4 * Int(round(cellSize.width * c))
                         bytesOut[offset] = bytesIn[offsetIn]
                         bytesOut[offset+1] = bytesIn[offsetIn+1]
                         bytesOut[offset+2] = bytesIn[offsetIn+2]
