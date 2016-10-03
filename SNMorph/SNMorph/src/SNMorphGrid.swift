@@ -82,47 +82,44 @@ struct SNMorphGrid {
             let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
 
             let p0 = handles[gx][gy]
-            func process(p1:CGPoint, p2:CGPoint) {
-                let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
-                let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
-                let d10 = p1.delta(from: p0)
-                let d20 = p2.delta(from: p0)
-                let k = d20.x * d10.y - d10.x * d20.y
-                if k==0.0 {
-                    return
-                }
-                let d21 = p2.delta(from: p1)
-                let d02 = p0.delta(from: p2)
-                for y in 0..<Int(target.y - origin.y) {
-                    var offset = bytesPerRow * (origin.y + y) + 4 * (origin.x)
-                    for x in 0..<(target.x - origin.x) {
-                        let pt = CGPoint(x: CGFloat(origin.x + x), y: CGFloat(origin.y + y))
-                        let d0 = pt.delta(from: p0)
-                        if d10.crossProduct(with: d0) >= 0
-                          && d21.crossProduct(with: pt.delta(from: p1)) >= 0
-                          && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
-                            let a = (d0.y * d20.x - d0.x * d20.y) / k
-                            let b = (d0.x * d10.y - d0.y * d10.x) / k
-                            let c = CGFloat(gx) + dir * a
-                            let d = CGFloat(gy) + dir * b
-                            let offsetIn = bytesPerRow * Int(round(cellSize.height * d)) + 4 * Int(round(cellSize.width * c))
-                            bytesOut[offset] = bytesIn[offsetIn]
-                            bytesOut[offset+1] = bytesIn[offsetIn+1]
-                            bytesOut[offset+2] = bytesIn[offsetIn+2]
-                            bytesOut[offset+3] = bytesIn[offsetIn+3]
-                        }
-                        offset += 4
-                    }
-                }
-            }
+            let p1:CGPoint, p2:CGPoint
             if dir == 1 {
-                let ptS = handles[gx][gy+1]
-                let ptE = handles[gx+1][gy]
-                process(p1:ptE, p2:ptS)
+                p1 = handles[gx+1][gy]
+                p2 = handles[gx][gy+1]
             } else {
-                let ptN = handles[gx][gy-1]
-                let ptW = handles[gx-1][gy]
-                process(p1:ptW, p2:ptN)
+                p1 = handles[gx-1][gy]
+                p2 = handles[gx][gy-1]
+            }
+            let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
+            let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
+            let d10 = p1.delta(from: p0)
+            let d20 = p2.delta(from: p0)
+            let k = d20.x * d10.y - d10.x * d20.y
+            if k==0.0 {
+                return
+            }
+            let d21 = p2.delta(from: p1)
+            let d02 = p0.delta(from: p2)
+            for y in 0..<Int(target.y - origin.y) {
+                var offset = bytesPerRow * (origin.y + y) + 4 * (origin.x)
+                for x in 0..<(target.x - origin.x) {
+                    let pt = CGPoint(x: CGFloat(origin.x + x), y: CGFloat(origin.y + y))
+                    let d0 = pt.delta(from: p0)
+                    if d10.crossProduct(with: d0) >= 0
+                      && d21.crossProduct(with: pt.delta(from: p1)) >= 0
+                      && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
+                        let a = (d0.y * d20.x - d0.x * d20.y) / k
+                        let b = (d0.x * d10.y - d0.y * d10.x) / k
+                        let c = CGFloat(gx) + dir * a
+                        let d = CGFloat(gy) + dir * b
+                        let offsetIn = bytesPerRow * Int(round(cellSize.height * d)) + 4 * Int(round(cellSize.width * c))
+                        bytesOut[offset] = bytesIn[offsetIn]
+                        bytesOut[offset+1] = bytesIn[offsetIn+1]
+                        bytesOut[offset+2] = bytesIn[offsetIn+2]
+                        bytesOut[offset+3] = bytesIn[offsetIn+3]
+                    }
+                    offset += 4
+                }
             }
         }
         update(gx: gx, gy: gy, dir: 1)
