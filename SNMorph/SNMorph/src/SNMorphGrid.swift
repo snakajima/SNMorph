@@ -76,22 +76,14 @@ struct SNMorphGrid {
     }
 
     mutating func updateGrid(x gx:Int, y gy:Int) {
-        func update(gx:Int, gy:Int, dir:CGFloat) {
-            let bytesPerRow = 4 * Int(size.width)
-            let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
-            let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
-
+        let bytesPerRow = 4 * Int(size.width)
+        let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
+        let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
+        
+        func update(gx:Int, gy:Int, dir:Int) {
             let p0 = handles[gx][gy]
-            let p1:CGPoint, p2:CGPoint
-            if dir == 1 {
-                p1 = handles[gx+1][gy]
-                p2 = handles[gx][gy+1]
-            } else {
-                p1 = handles[gx-1][gy]
-                p2 = handles[gx][gy-1]
-            }
-            let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
-            let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
+            let p1 = handles[gx+dir][gy]
+            let p2 = handles[gx][gy+dir]
             let d10 = p1.delta(from: p0)
             let d20 = p2.delta(from: p0)
             let k = d20.x * d10.y - d10.x * d20.y
@@ -100,6 +92,9 @@ struct SNMorphGrid {
             }
             let d21 = p2.delta(from: p1)
             let d02 = p0.delta(from: p2)
+
+            let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
+            let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
             for y in 0..<Int(target.y - origin.y) {
                 var offset = bytesPerRow * (origin.y + y) + 4 * (origin.x)
                 for x in 0..<(target.x - origin.x) {
@@ -110,8 +105,8 @@ struct SNMorphGrid {
                       && d02.crossProduct(with: pt.delta(from: p2)) >= 0 {
                         let a = (d0.y * d20.x - d0.x * d20.y) / k
                         let b = (d0.x * d10.y - d0.y * d10.x) / k
-                        let c = CGFloat(gx) + dir * a
-                        let d = CGFloat(gy) + dir * b
+                        let c = CGFloat(gx) + CGFloat(dir) * a
+                        let d = CGFloat(gy) + CGFloat(dir) * b
                         let offsetIn = bytesPerRow * Int(round(cellSize.height * d)) + 4 * Int(round(cellSize.width * c))
                         bytesOut[offset] = bytesIn[offsetIn]
                         bytesOut[offset+1] = bytesIn[offsetIn+1]
