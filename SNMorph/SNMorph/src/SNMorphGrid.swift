@@ -76,9 +76,9 @@ struct SNMorphGrid {
     }
 
     mutating func updateGrid(x gx:Int, y gy:Int) {
-        let bytesPerRow = 4 * Int(size.width)
-        let bytesOut = UnsafeMutablePointer<UInt8>(OpaquePointer(dataOut.mutableBytes))
-        let bytesIn = UnsafePointer<UInt8>(OpaquePointer(dataIn.bytes))
+        let wordsPerRow = Int(size.width)
+        let wordsOut = UnsafeMutablePointer<UInt32>(OpaquePointer(dataOut.mutableBytes))
+        let wordsIn = UnsafePointer<UInt32>(OpaquePointer(dataIn.bytes))
         let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         
         func update(gx:Int, gy:Int, dir:Int) {
@@ -97,8 +97,8 @@ struct SNMorphGrid {
             let origin:(x:Int, y:Int) = (Int(round(min(p0.x, p1.x, p2.x))), Int(round(min(p0.y, p1.y, p2.y))))
             let target:(x:Int, y:Int) = (Int(round(max(p0.x, p1.x, p2.x))), Int(round(max(p0.y, p1.y, p2.y))))
             for y in 0..<Int(target.y - origin.y) {
-                var offsetOut = bytesPerRow * (origin.y + y) + 4 * (origin.x)
-                let offsetMap = (origin.y + y) * Int(size.width) + origin.x
+                let offsetOut = wordsPerRow * (origin.y + y) + origin.x
+                let offsetMap = Int(size.width) * (origin.y + y) + origin.x
                 for x in 0..<(target.x - origin.x) {
                     let pt = CGPoint(x: CGFloat(origin.x + x), y: CGFloat(origin.y + y))
                     let d0 = pt.delta(from: p0)
@@ -108,14 +108,10 @@ struct SNMorphGrid {
                         let a = (d0.y * d20.x - d0.x * d20.y) / k
                         let b = (d0.x * d10.y - d0.y * d10.x) / k
                         let ptMap = CGPoint(x: CGFloat(gx) + CGFloat(dir) * a, y: CGFloat(gy) + CGFloat(dir) * b)
-                        let offsetIn = bytesPerRow * Int(round(cellSize.height * ptMap.y)) + 4 * Int(round(cellSize.width * ptMap.x))
-                        bytesOut[offsetOut] = bytesIn[offsetIn]
-                        bytesOut[offsetOut + 1] = bytesIn[offsetIn + 1]
-                        bytesOut[offsetOut + 2] = bytesIn[offsetIn + 2]
-                        bytesOut[offsetOut + 3] = bytesIn[offsetIn + 3]
+                        let offsetIn = wordsPerRow * Int(round(cellSize.height * ptMap.y)) + Int(round(cellSize.width * ptMap.x))
+                        wordsOut[offsetOut + x] = wordsIn[offsetIn]
                         bytesMap[offsetMap + x] = ptMap
                     }
-                    offsetOut += 4
                 }
             }
         }
