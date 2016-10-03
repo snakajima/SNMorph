@@ -97,6 +97,9 @@ struct SNMorphGrid {
             let d10 = p1.delta(from: p0)
             let d20 = p2.delta(from: p0)
             let k = d20.x * d10.y - d10.x * d20.y
+            if k==0.0 {
+                return
+            }
             let d21 = p2.delta(from: p1)
             let d02 = p0.delta(from: p2)
             for y in 0..<Int(target.y - origin.y) {
