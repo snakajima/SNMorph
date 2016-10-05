@@ -80,10 +80,15 @@ struct SNMorphGrid {
         let ptN = handles[x][y-1]
         let ptNE = handles[x+1][y-1]
         let ptE = handles[x+1][y]
+        let ptS = handles[x][y+1]
+        let ptSE = handles[x-1][y+1]
         return { pt in
             return ptN.delta(from: ptW).crossProduct(with: pt.delta(from: ptW)) > 0
                 && ptNE.delta(from: ptN).crossProduct(with: pt.delta(from: ptN)) > 0
                 && ptE.delta(from: ptNE).crossProduct(with: pt.delta(from: ptNE)) > 0
+                && ptS.delta(from: ptE).crossProduct(with: pt.delta(from: ptE)) > 0
+                && ptSE.delta(from: ptS).crossProduct(with: pt.delta(from: ptS)) > 0
+                && ptW.delta(from: ptSE).crossProduct(with: pt.delta(from: ptSE)) > 0
         }
     }
 
