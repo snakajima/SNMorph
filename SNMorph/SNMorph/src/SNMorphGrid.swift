@@ -140,7 +140,6 @@ struct SNMorphGrid {
                         let offsetIn = wordsPerRow * Int(ptGrid.y) + Int(ptGrid.x)
                         var color = wordsIn[offsetIn]
 
-/*
                         let rx = ptTarget.x - ptGrid.x, ry = ptTarget.y - ptGrid.y
                         let c00 = wordsIn[offsetIn]
                         let w00 = (1 - rx) * (1 - ry)
@@ -153,7 +152,7 @@ struct SNMorphGrid {
                         color.r = UInt8(c00.red * w00 + c01.red * w01 + c10.red * w10 + c11.red * w11)
                         color.g = UInt8(c00.green * w00 + c01.green * w01 + c10.green * w10 + c11.green * w11)
                         color.b = UInt8(c00.blue * w00 + c01.blue * w01 + c10.blue * w10 + c11.blue * w11)
-*/
+
                         wordsOut[offsetOut + x] = color
                         bytesMap[offsetMap + x] = ptMap
                     }
