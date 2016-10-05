@@ -75,11 +75,11 @@ struct SNMorphGrid {
         updateGrid(x: x, y: y)
     }
     
-    func boundChecker(x:Int, y:Int) -> (CGPoint)->Bool {
-            //let pW = handles[x-1][y]
-            //let pN = handles[x][y-1]
-        return { _ in
-            return true
+    mutating func boundChecker(x:Int, y:Int) -> (CGPoint)->Bool {
+        let ptW = handles[x-1][y]
+        let ptN = handles[x][y-1]
+        return { pt in
+            return ptN.delta(from: ptW).crossProduct(with: pt.delta(from: ptW)) > 0
         }
     }
 
