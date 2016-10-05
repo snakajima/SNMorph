@@ -93,9 +93,15 @@ struct SNMorphGrid {
     }
 
     mutating func updateGrid(x gx:Int, y gy:Int) {
+        struct Color {
+            var r:UInt8
+            var g:UInt8
+            var b:UInt8
+            var a:UInt8
+        }
         let wordsPerRow = Int(size.width)
-        let wordsOut = UnsafeMutablePointer<UInt32>(OpaquePointer(dataOut.mutableBytes))
-        let wordsIn = UnsafePointer<UInt32>(OpaquePointer(dataIn.bytes))
+        let wordsOut = UnsafeMutablePointer<Color>(OpaquePointer(dataOut.mutableBytes))
+        let wordsIn = UnsafePointer<Color>(OpaquePointer(dataIn.bytes))
         let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         
         func update(gx:Int, gy:Int, dir:Int) {
