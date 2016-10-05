@@ -97,16 +97,6 @@ class SNMorphEditController: UIViewController {
                 viewMain.layer.contents = grid.cgImage
             }
         case .ended:
-            if let handle = handle {
-                var rc = handle.layer.frame
-                rc.origin = ptMain.translate(x: -rc.size.width/2.0, y: -rc.size.height/2.0)
-                CATransaction.begin()
-                CATransaction.setAnimationDuration(0.0)
-                handle.layer.frame = rc
-                CATransaction.commit()
-                grid.undateHandle(x: handle.x, y: handle.y, pt: ptMain)
-                viewMain.layer.contents = grid.cgImage
-            }
             handle = nil
         default:
             handle = nil
