@@ -135,9 +135,9 @@ struct SNMorphGrid {
                         let a = (d0.y * d20.x - d0.x * d20.y) / k
                         let b = (d0.x * d10.y - d0.y * d10.x) / k
                         let ptMap = CGPoint(x: CGFloat(gx) + CGFloat(dir) * a, y: CGFloat(gy) + CGFloat(dir) * b)
-                        let ptTarget = CGPoint(x: cellSize.height * ptMap.y, y: cellSize.width * ptMap.x)
+                        let ptTarget = CGPoint(x: cellSize.width * ptMap.x, y: cellSize.height * ptMap.y)
                         let ptGrid = CGPoint(x: floor(ptTarget.x), y: floor(ptTarget.y))
-                        let offsetIn = wordsPerRow * Int(ptGrid.x) + Int(ptGrid.y)
+                        let offsetIn = wordsPerRow * Int(ptGrid.y) + Int(ptGrid.x)
                         var color = wordsIn[offsetIn]
 
 /*
