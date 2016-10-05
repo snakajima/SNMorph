@@ -22,9 +22,37 @@ class ViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? SNMorphEditController {
-            vc.grid = SNMorphGrid(image: UIImage(named: "IMG_5417.JPG")!, slice:(x:8,y:6), border: 0)
+            if let image = sender as? UIImage {
+                vc.grid = SNMorphGrid(image: image, slice: (x: 8, y: 6), border: 0)
+            } else {
+                vc.grid = SNMorphGrid(image: UIImage(named: "IMG_5417.JPG")!, slice:(x:8,y:6), border: 2)
+            }
         }
     }
 
+    @IBAction func importPhoto(sender:UIBarButtonItem) {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+        picker.modalPresentationStyle = .popover
+        picker.popoverPresentationController?.barButtonItem = sender
+        self.present(picker, animated: true, completion: nil)
+    }
+    
+}
+
+extension ViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        self.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            NSLog("AssetGroup picker: no no image")
+            return
+        }
+        performSegue(withIdentifier: "editor", sender: image)
+    }
 }
 
