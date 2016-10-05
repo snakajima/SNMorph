@@ -8,6 +8,20 @@
 
 import UIKit
 
+private extension UIImage {
+    func imageWith(limit:CGFloat) -> UIImage {
+        let size = self.size
+        let scale = min(limit / size.width, limit / size.height, 1)
+        return { Void -> UIImage in
+            let frame = CGRect(x:0, y:0, width: size.width * scale, height: size.height * scale)
+            UIGraphicsBeginImageContext(frame.size)
+            defer { UIGraphicsEndImageContext() }
+            self.draw(in: frame)
+            return UIGraphicsGetImageFromCurrentImageContext()!
+        } ()
+    }
+}
+
 struct SNMorphGrid {
     var cgImage:CGImage?
     let slice:(x:Int, y:Int)
@@ -28,13 +42,14 @@ struct SNMorphGrid {
     private let dataMap:NSMutableData
     private let bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue
                 | CGImageAlphaInfo.premultipliedLast.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
-    init(image:UIImage, slice:(x:Int, y:Int), border:Int) {
+    init(image:UIImage, slice:(x:Int, y:Int), border:Int, limit:CGFloat) {
+        let imageResized = image.imageWith(limit: limit)
         self.slice = slice
         self.border = border
         gridX = slice.x + border * 2
         gridY = slice.y + border * 2
-        cellSize = CGSize(width: image.size.width / CGFloat(slice.x),
-                          height: image.size.height / CGFloat(slice.y))
+        cellSize = CGSize(width: imageResized.size.width / CGFloat(slice.x),
+                          height: imageResized.size.height / CGFloat(slice.y))
         size = CGSize(width:cellSize.width * CGFloat(gridX),
                                 height:cellSize.height * CGFloat(gridY))
         let length = 4 * Int(size.width) * Int(size.height)
@@ -42,7 +57,7 @@ struct SNMorphGrid {
         let context = CGContext(data: data.mutableBytes, width: Int(size.width), height: Int(size.height), bitsPerComponent: 8, bytesPerRow: 4 * Int(size.width), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: bitmapInfo)!
         
         let origin = CGPoint(x:cellSize.width * CGFloat(border), y:cellSize.height * CGFloat(border))
-        context.draw(image.cgImage!, in: CGRect(origin: origin, size:image.size))
+        context.draw(imageResized.cgImage!, in: CGRect(origin: origin, size:imageResized.size))
         dataIn = data
         dataOut = NSMutableData(length: length)!
         memcpy(dataOut.mutableBytes, dataIn.bytes, length)
