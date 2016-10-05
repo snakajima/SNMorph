@@ -93,15 +93,19 @@ struct SNMorphGrid {
     }
 
     mutating func updateGrid(x gx:Int, y gy:Int) {
-        struct Color {
+        struct RGBAColor {
             var r:UInt8
             var g:UInt8
             var b:UInt8
             var a:UInt8
+            var red:CGFloat { return CGFloat(r) }
+            var green:CGFloat { return CGFloat(g) }
+            var blue:CGFloat { return CGFloat(b) }
+            var alpha:CGFloat { return CGFloat(a) }
         }
         let wordsPerRow = Int(size.width)
-        let wordsOut = UnsafeMutablePointer<Color>(OpaquePointer(dataOut.mutableBytes))
-        let wordsIn = UnsafePointer<Color>(OpaquePointer(dataIn.bytes))
+        let wordsOut = UnsafeMutablePointer<RGBAColor>(OpaquePointer(dataOut.mutableBytes))
+        let wordsIn = UnsafePointer<RGBAColor>(OpaquePointer(dataIn.bytes))
         let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
         
         func update(gx:Int, gy:Int, dir:Int) {
@@ -131,8 +135,26 @@ struct SNMorphGrid {
                         let a = (d0.y * d20.x - d0.x * d20.y) / k
                         let b = (d0.x * d10.y - d0.y * d10.x) / k
                         let ptMap = CGPoint(x: CGFloat(gx) + CGFloat(dir) * a, y: CGFloat(gy) + CGFloat(dir) * b)
-                        let offsetIn = wordsPerRow * Int(round(cellSize.height * ptMap.y)) + Int(round(cellSize.width * ptMap.x))
-                        wordsOut[offsetOut + x] = wordsIn[offsetIn]
+                        let ptTarget = CGPoint(x: cellSize.height * ptMap.y, y: cellSize.width * ptMap.x)
+                        let ptGrid = CGPoint(x: floor(ptTarget.x), y: floor(ptTarget.y))
+                        let offsetIn = wordsPerRow * Int(ptGrid.x) + Int(ptGrid.y)
+                        var color = wordsIn[offsetIn]
+
+/*
+                        let rx = ptTarget.x - ptGrid.x, ry = ptTarget.y - ptGrid.y
+                        let c00 = wordsIn[offsetIn]
+                        let w00 = (1 - rx) * (1 - ry)
+                        let c01 = wordsIn[offsetIn + 1]
+                        let w01 = rx * (1 - ry)
+                        let c10 = wordsIn[offsetIn + wordsPerRow]
+                        let w10 = (1 - rx) * ry
+                        let c11 = wordsIn[offsetIn + wordsPerRow + 1]
+                        let w11 = rx * ry
+                        color.r = UInt8(c00.red * w00 + c01.red * w01 + c10.red * w10 + c11.red * w11)
+                        color.g = UInt8(c00.green * w00 + c01.green * w01 + c10.green * w10 + c11.green * w11)
+                        color.b = UInt8(c00.blue * w00 + c01.blue * w01 + c10.blue * w10 + c11.blue * w11)
+*/
+                        wordsOut[offsetOut + x] = color
                         bytesMap[offsetMap + x] = ptMap
                     }
                 }
