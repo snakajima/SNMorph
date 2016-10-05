@@ -53,6 +53,7 @@ class SNMorphEditController: UIViewController {
                 layer.cornerRadius = handleSize.width/2.0
                 layer.masksToBounds = true
                 layer.backgroundColor = UIColor.magenta.cgColor
+                layer.opacity = 0.5
                 viewMain.layer.addSublayer(layer)
                 return layer
             }

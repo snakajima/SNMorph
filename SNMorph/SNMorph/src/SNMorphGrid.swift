@@ -49,8 +49,8 @@ struct SNMorphGrid {
         
         dataMap = NSMutableData(length: MemoryLayout<CGPoint>.size * Int(size.width) * Int(size.height))!
         let bytesMap = UnsafeMutablePointer<CGPoint>(OpaquePointer(dataMap.mutableBytes))
-        for y in 0..<Int(size.width) {
-            for x in 0..<Int(size.height) {
+        for y in 0..<Int(size.height) {
+            for x in 0..<Int(size.width) {
                 bytesMap[y * Int(size.width) + x] = CGPoint(x: CGFloat(x) / cellSize.width, y:CGFloat(y) / cellSize.height)
             }
         }
