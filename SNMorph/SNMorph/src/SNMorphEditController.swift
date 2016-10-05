@@ -11,7 +11,7 @@ import UIKit
 class SNMorphEditController: UIViewController {
     public var grid:SNMorphGrid!
     
-    @IBOutlet var viewMain:UIView!
+    private let viewMain = UIView()
 
     private var xform = CGAffineTransform.identity
     private var layers = [[CALayer]]()
@@ -26,11 +26,23 @@ class SNMorphEditController: UIViewController {
         return false
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let xf = CGAffineTransform.init(translationX: (view.frame.size.width-grid.size.width)/2, y: (view.frame.size.height-grid.size.height)/2)
+        let scale = min(view.frame.size.width / grid.size.width, view.frame.size.height / grid.size.height)
+        xform = xf.scaledBy(x: scale, y: scale)
+        viewMain.transform = xform
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        viewMain.frame = CGRect(origin: .zero, size: grid.size)
+        view.addSubview(viewMain)
 
         viewMain.layer.contentsGravity = kCAGravityBottomLeft
         viewMain.layer.contents = grid.cgImage
+        viewMain.layer.backgroundColor = UIColor.white.cgColor
         
         let handleSize = CGSize(width: grid.cellSize.width/6.0, height: grid.cellSize.width/6.0)
         layers = (0...grid.gridX).map { (x) -> [CALayer] in
