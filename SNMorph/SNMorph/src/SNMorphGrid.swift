@@ -74,6 +74,14 @@ struct SNMorphGrid {
         handles[x][y] = pt
         updateGrid(x: x, y: y)
     }
+    
+    func boundChecker(x:Int, y:Int) -> (CGPoint)->Bool {
+            //let pW = handles[x-1][y]
+            //let pN = handles[x][y-1]
+        return { _ in
+            return true
+        }
+    }
 
     mutating func updateGrid(x gx:Int, y gy:Int) {
         let wordsPerRow = Int(size.width)

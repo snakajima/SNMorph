@@ -86,9 +86,7 @@ class SNMorphEditController: UIViewController {
             let x = Int(round(pos.x)), y = Int(round(pos.y))
             if 0 < x && x < grid.gridX && 0 < y && y < grid.gridY {
                 handle = (layer:layers[x][y], x:x, y:y)
-                isInBound = { _ in
-                    return true
-                }
+                isInBound = grid.boundChecker(x: x, y: y)
             }
             break
         case .changed:
