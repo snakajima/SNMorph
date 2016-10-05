@@ -22,6 +22,9 @@ class SNMorphEditController: UIViewController {
 
     // Transient properties for handlePan
     private var handle:(layer:CALayer, x:Int, y:Int)?
+    private var isInBound:((CGPoint)->Bool) = { _ in
+        return false
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,10 +86,13 @@ class SNMorphEditController: UIViewController {
             let x = Int(round(pos.x)), y = Int(round(pos.y))
             if 0 < x && x < grid.gridX && 0 < y && y < grid.gridY {
                 handle = (layer:layers[x][y], x:x, y:y)
+                isInBound = { _ in
+                    return true
+                }
             }
             break
         case .changed:
-            if let handle = handle {
+            if let handle = handle, isInBound(ptMain) {
                 var rc = handle.layer.frame
                 rc.origin = ptMain.translate(x: -rc.size.width/2.0, y: -rc.size.height/2.0)
                 CATransaction.begin()
